@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aivora AI Video Studio</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080817;color:white;font-family:Arial,sans-serif}
+header{padding:20px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #292344}
+.logo{font-size:23px;font-weight:bold;color:#bd8cff}
+.logo span{color:#fff}
+.tag{font-size:11px;color:#bba6ff;border:1px solid #6441a5;padding:6px 9px;border-radius:20px}
+.hero{text-align:center;padding:28px 15px 15px}
+.hero h1{font-size:29px;margin:10px 0;background:linear-gradient(90deg,#b66aff,#55c8ff);background-clip:text;color:transparent}
+.hero p{color:#aaa;font-size:14px;line-height:1.6}
+.orb{width:112px;height:112px;margin:20px auto;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3baff,#8a36ff 38%,#172b9b 70%,#09091b);box-shadow:0 0 35px #873aff,0 0 65px #254cff}
+.container{padding:12px 16px;max-width:650px;margin:auto}
+.panel{background:#15152b;border:1px solid #30264f;border-radius:17px;padding:17px;margin-bottom:15px}
+h2{font-size:17px;margin:0 0 15px}
+label{display:block;font-size:13px;color:#c9c1df;margin:12px 0 7px}
+select,textarea,input{width:100%;background:#09091b;border:1px solid #44365f;border-radius:10px;padding:13px;color:white;font-size:14px;outline:none}
+textarea{height:105px;resize:vertical}
+.voicegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.voice{background:#101025;border:1px solid #383052;border-radius:11px;padding:12px;font-size:13px;cursor:pointer}
+.voice.active{border:1px solid #b66aff;background:#292044}
+.voice small{display:block;color:#aaa;margin-top:5px}
+button{border:0;border-radius:11px;padding:13px 16px;font-weight:bold;cursor:pointer}
+.primary{width:100%;background:linear-gradient(90deg,#873bff,#287dff);color:white;font-size:15px;margin-top:14px}
+.secondary{background:#30234c;color:#e4d4ff;width:100%;margin-top:10px}
+.note{font-size:12px;color:#aaa;line-height:1.5;margin-top:12px}
+#status{font-size:13px;color:#bca1ff;margin-top:12px;text-align:center}
+footer{text-align:center;color:#777;font-size:12px;padding:25px}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">✦ Aivora <span>AI</span></div>
+ <div class="tag">VIDEO STUDIO</div>
+</header>
+
+<section class="hero">
+ <div class="orb"></div>
+ <h1>Create Your AI Video</h1>
+ <p>Make talking robot videos with AI voices.<br>Choose your language, voice and video idea.</p>
+</section>
+
+<main class="container">
+ <section class="panel">
+  <h2>🎬 Video Details</h2>
+  <label>Video Title</label>
+  <input id="title" placeholder="My Aivora AI Video">
+  <label>Describe your video</label>
+  <textarea id="prompt" placeholder="A futuristic robot speaks to the camera in a beautiful neon city..."></textarea>
+  <label>Video Duration</label>
+  <select id="duration">
+   <option>10 seconds</option>
+   <option>20 seconds</option>
+   <option selected>30 seconds</option>
+   <option>60 seconds</option>
+  </select>
+ </section>
+
+ <section class="panel">
+  <h2>🌍 Select Language</h2>
+  <select id="language">
+   <option value="hi-IN">Hindi - हिंदी</option>
+   <option value="en-IN">English</option>
+   <option value="or-IN">Odia - ଓଡ଼ିଆ</option>
+   <option value="te-IN">Telugu - తెలుగు</option>
+   <option value="ta-IN">Tamil - தமிழ்</option>
+   <option value="kn-IN">Kannada - ಕನ್ನಡ</option>
+   <option value="bn-IN">Bengali - বাংলা</option>
+   <option value="bho-IN">Bhojpuri - भोजपुरी</option>
+  </select>
+ </section>
+
+ <section class="panel">
+  <h2>🎙️ Choose Your AI Voice</h2>
+  <select id="category">
+   <option value="robot">🤖 Robot Voices - 7</option>
+   <option value="female">👩 Female Voices - 7</option>
+   <option value="male">👨 Male Voices - 6</option>
+  </select>
+  <div class="voicegrid" id="voices"></div>
+  <button class="secondary" onclick="previewVoice()">▶ Preview Voice</button>
+  <div class="note">Voice preview आपके मोबाइल या ब्राउज़र में उपलब्ध speech voices पर निर्भर करेगा।</div>
+ </section>
+
+ <section class="panel">
+  <h2>🗣️ Voice Script</h2>
+  <textarea id="script">Hello! I am Aivora AI. Welcome to the future of artificial intelligence!</textarea>
+  <button class="secondary" onclick="previewScript()">🔊 Listen to Script</button>
+ </section>
+
+ <section class="panel">
+  <h2>✨ Create Your Video</h2>
+  <button class="primary" onclick="createVideo()">🚀 Generate AI Video</button>
+  <div id="status">Your video studio is ready.</div>
+  <p class="note">यह शुरुआती वेबसाइट इंटरफ़ेस है। असली AI वीडियो, आवाज़ और lip-sync बनाने के लिए अगला चरण backend और generation service जोड़ना होगा।</p>
+ </section>
+</main>
+
+<footer>© 2026 Aivora AI Video Studio</footer>
+
+<script>
+var voiceData={
+ robot:["Robo One","Robo Deep","Robo X","Cyber Bot","Metal Voice","Future AI","Aivora Robot"],
+ female:["Anaya","Priya","Maya","Sofia","Angel","Riya","Aarohi"],
+ male:["Arjun","Rahul","Aman","David","Rohan","Vikram"]
+};
+var selectedVoice="Robo One";
+
+function showVoices(){
+ var category=document.getElementById("category").value;
+ var box=document.getElementById("voices");
+ box.innerHTML="";
+ voiceData[category].forEach(function(name,index){
+  var div=document.createElement("div");
+  div.className="voice"+(selectedVoice===name?" active":"");
+  div.innerHTML=name+"<small>"+(category==="robot"?"🤖 Robot":category==="female"?"👩 Female":"👨 Male")+"</small>";
+  div.onclick=function(){
+   selectedVoice=name;
+   showVoices();
+  };
+  box.appendChild(div);
+ });
+}
+document.getElementById("category").onchange=function(){
+ selectedVoice=voiceData[this.value][0];
+ showVoices();
+};
+showVoices();
+
+function speak(text){
+ if(!("speechSynthesis" in window)){
+  document.getElementById("status").innerText="Voice preview इस browser में उपलब्ध नहीं है।";
+  return;
+ }
+ window.speechSynthesis.cancel();
+ var utter=new SpeechSynthesisUtterance(text);
+ utter.lang=document.getElementById("language").value;
+ utter.rate=selectedVoice.indexOf("Deep")>=0?0.8:1;
+ utter.pitch=document.getElementById("category").value==="female"?1.3:
+ document.getElementById("category").value==="robot"?0.75:0.95;
+ window.speechSynthesis.speak(utter);
+ document.getElementById("status").innerText="Playing preview: "+selectedVoice;
+}
+function previewVoice(){
+ speak("Hello! I am "+selectedVoice+". Welcome to Aivora AI Video Studio.");
+}
+function previewScript(){
+ speak(document.getElementById("script").value);
+}
+function createVideo(){
+ var prompt=document.getElementById("prompt").value;
+ if(!prompt.trim()){
+  document.getElementById("status").innerText="Please describe your video first.";
+  return;
+ }
+ document.getElementById("status").innerText=
+ "Your video idea is ready! AI video generation engine will be connected in the next step.";
+}
+</script>
+</body>
+</html>
